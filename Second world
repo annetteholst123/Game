@@ -3,47 +3,47 @@ import random
 class MoviePortalGame:
     # Initialize the game with the player's name and starting points
     def __init__(self, name: str, points: int):
-        self.points = points
+        self.points = points #Store player points
         self.portalpieces = []  # List to track collected portal pieces
         self.second_portal_piece = "Portal piece of the second world"  # Portal piece for this world
         print("\nIndiana Jones has been transported into The Matrix! To return to his world, he must earn 100 points and collect the portal piece for this world.\n")
         sleep(1)
-        self.choose_world()
+        self.choose_world() # Start game by choosing a world
 
-    # Main menu for choosing the world or exiting the game
+    #Main menu for choosing the world or exiting the game
     def choose_world(self):
-        while True:
+        while True: #Infinite loop until player exits
             print("\nWhich simulation do you want to enter?")
             print("1. The Matrix World")
             print("2. Exit simulation")
-            choice = input("Enter your choice (1/2): ")
+            choice = input("Enter your choice (1/2): ") #Gets the user input
             
-            if choice == "1":
+            if choice == "1": #If user chooses to enter The Matrix world (second world)
                 self.second_world()
             elif choice == "2":
                 print("Thanks for playing! Goodbye.")
-                break
+                break #Will exit the loop
             else:
-                print("Invalid choice, please try again.")
+                print("Invalid choice, please try again.") #Will handle invalid input
     
-    # Main function for The Matrix world
+    #Main function for the second world
     def second_world(self):
-        # Check if player has already earned the portal piece
+        #Checks if player has already earned the portal piece
         if self.second_portal_piece in self.portalpieces:
             user_input = input("You've already completed this world. If you start again, you will have to earn this portal piece again. Do you want to continue? (y/n): ")
             if user_input.lower() == "n":
                 return
             elif user_input.lower() == "y":
-                self.portalpieces.remove(self.second_portal_piece)
+                self.portalpieces.remove(self.second_portal_piece) #Remove the portal piece if the player would like to play again
         
         print("\nIndiana Jones wakes up in a dark city alley, neon lights flickering above. A mysterious figure in a trench coat approaches him.")
         sleep(2)
         print("'Welcome to The Matrix. You need to make a choice if you want to survive.'")
-        sleep(3)
+        sleep(3) #Break for three seconds so the game is more clear
        
         self.choose_door()
         
-        # Check if enough points are collected for the portal piece
+        #Check if enough points are collected in order for the player (indiana jones) to get the portal piece
         if self.points >= 100:
             print("\nCongratulations! Indiana Jones has collected enough points and earned another portal piece to get closer to going home")
             self.portalpieces.append(self.second_portal_piece) #Add element to portal pieces list
@@ -51,45 +51,45 @@ class MoviePortalGame:
             print("\nYou haven't collected enough points yet. Try again!")
             self.second_world()
 
-    # Function to choose an action by selecting a coloured door
+    #Function to choose an action by selecting a coloured door
     def choose_door(self):
         while True:
-            print("\nIn front of you are four doors:")
-            print("1. A Blue Door")
+            print("\nIn front of you are four doors:") #choosing door to go to different interactions/games within my world
+            print("1. A Blue Door") 
             print("2. A Yellow Door")
             print("3. A Green Door")
             choice = input("Which door do you enter? (1/2/3): ")
             
             if choice == "1":
-                self.subway_shootout()
+                self.subway_shootout() #Is connected to the blue door
             elif choice == "2":
-                self.indiana_vs_agent_smith_fight()
-            elif choice == "3":
-                self.code_hacking_game()
+                self.virtual_reality_maze() #Is connected to the yellow door 
+            elif choice == "3": 
+                self.code_hacking_game() #Is connected to the green door
             else:
                 print("Invalid choice, please select a valid door.")
     
-    # Subway Shootout
+    #Subway shootout game
     def subway_shootout(self):
         print("\nIndiana Jones enters a subway station. Suddenly, an agent appears, and the only way out is through him!")
         sleep(1)
-        ammo = 5  # Starting bullets
-        enemy_health = 2  # Reduced enemy health for a quicker fight
-        while ammo > 0 and enemy_health > 0:
+        bullets = 5  # Starting bullets
+        enemy_health = 2  #The lifes of the agent
+        while bullets > 0 and enemy_health > 0:
             action = input("Do you shoot (s), dodge (d), or find cover (c)? ")
-            if action.lower() == "s" and random.choices([True, False], weights=[70, 30])[0]:
+            if action.lower() == "s" and random.choices([True, False], weights=[70, 30])[0]: #Randomness to the game but it is more likely to earn points, because 70/30 chance (not 50/50)
                 print("You fire a shot! The agent dodges but gets grazed!")
-                enemy_health -= 1
-                self.points += 10
-                ammo -= 1
+                enemy_health -= 1 #Decrease of one life point
+                self.points += 10 #Adding 10 points when the shot was a hit
+                bullets -= 1 #Decrease of one bullet when the player shot one
             elif action.lower() == "d" and random.choices([True, False], weights=[70, 30])[0]:
                 print("Indiana dodges the agent's bullet, moving in bullet-time!")
             elif action.lower() == "c" and random.choices([True, False], weights=[70, 30])[0]:
                 print("You take cover and reload your gun!")
-                ammo = 5
+                bullets = 5 #Still five bullets cause the player did not loose any
             else:
                 print("The agent fires back! You take a hit!")
-                ammo -= 1
+                bullets -= 1
         if enemy_health <= 0:
             print("You take down the agent and escape! Extra points awarded!")
             self.points += 30
@@ -97,33 +97,28 @@ class MoviePortalGame:
             print("You ran out of ammo! The agent eliminates you! Try again.")
             self.subway_shootout()
 
-    # Indiana Jones vs Agent Smith Fight
-    def indiana_vs_agent_smith_fight(self):
-        print("\nIndiana Jones steps onto a rooftop. Agent Smith stands before him, sunglasses gleaming.")
+    # Virtual reality maze challenge
+    def virtual_reality_maze(self):
+        print("\nIndiana Jones finds himself inside a virtual reality maze, a glitching construct of The Matrix.")
+        sleep(2)
+        print("The walls shift and change as he moves. He must find the right path before the system resets!")
         sleep(1)
-        health = 3  # Indiana's health
-        enemy_health = 2  # Reduced enemy health
-        while health > 0 and enemy_health > 0:
-            action = input("Do you attack (a), dodge (d), or use bullet time (b)? ")
-            if action.lower() == "a" and random.choices([True, False], weights=[70, 30])[0]: #Adds randomness to the game 70/30 choosing right one
-                print("Indiana lands a punch! Agent Smith stumbles!")
-                enemy_health -= 1
-                self.points += 10
-            elif action.lower() == "d" and random.choices([True, False], weights=[70, 30])[0]:
-                print("Indiana dodges an attack gracefully!")
-            elif action.lower() == "b" and random.choices([True, False], weights=[70, 30])[0]:
-                print("Indiana slows time and lands a perfect strike!")
-                enemy_health -= 2
-                self.points += 20
-            else:
-                print("Agent Smith lands a hit! Be careful!")
-                health -= 1
-        if health > 0:
-            print("You win the battle and earn extra points!")
-            self.points += 30
-        else:
-            print("You have been defeated! Try again.")
-            self.indiana_vs_agent_smith_fight()
+        
+        for i in range(3):  #Adds multiple decision points so that I will not have to retype the code three times
+            print(f"\nStage {i + 1} of the maze") #By using i + 1, the displayed phase numbers become Stage 1, Stage 2, and Stage 3, making it clearer for the player otherwise the player will begin at Stage 0
+            correct_path = random.choice(["left", "right", "forward"])
+            while True:
+                choice = input("Do you go left, right, or forward? ").lower()
+                if choice == correct_path:
+                    print("The walls solidify, and you proceed to the next phase of the maze!")
+                    self.points += 10  #Award points per phase
+                    break
+                else:
+                    print("The walls shift, and you're sent back to the start of this phase! Try again.")
+        
+        print("You successfully navigate the maze and escape the simulation glitch!")
+        self.points += 50  # Final reward for completion
+        sleep(2)
             
     # Code for hacking game with multiple challenges and a interaction with a Matrix character
     def code_hacking_game(self):
@@ -135,7 +130,7 @@ class MoviePortalGame:
         sleep(2)
         print("She hands you a small device. 'Use this decryption key wisely, but you'll still need to prove yourself.'")
         sleep(2)
-        print("'Would you want to help me out to hack the system and earn points for your portal piece?'")
+        print("'Would you want to help me out to hack the system and earn points for your portal piece so that we can both be safe?'")
         sleep(1)
         response = input("Will you help? (y/n): ").lower()
         if response == 'n':
@@ -147,7 +142,7 @@ class MoviePortalGame:
                 return
             else:
                 print("Trinity sighs. 'Alright, let's try another way.'")
-                self.morpheus_jump_challenge()
+                self.subway_shoutout()
                 return
         elif response == 'y':
             print("Trinity nods. 'Alright, let's do this.'")
@@ -158,11 +153,11 @@ class MoviePortalGame:
         print("To hack the system, you must complete multiple challenges.")
         sleep(2)
         
-         # First challenge: Disable the Security System
+         #First challenge: Disable the Security System
         print("Challenge 1: Disable the Security System")
         print("Before hacking the system, you must bypass a security firewall by cutting the right wire.")
         print("You see three wires: Red, Blue, and Green.")
-        correct_wire = random.choice(["Red", "Blue", "Green"])
+        correct_wire = random.choice(["Red", "Blue", "Green"]) 
         
         while True:
             user_wire = input("Which wire do you cut? (Red/Blue/Green) (Type 'hint' for help): ").capitalize()
@@ -209,49 +204,42 @@ class MoviePortalGame:
       
     
     #Third challenge: Logic puzzle with fight interaction
+    def fight_interaction(self):
+        print("\n After you navigated through the maze you want to continue to your last challenge but all of a sudden the door behind you bursts open!")
+        sleep(2)
+        print("An Agent storms in, eyes locked onto you.")
+        sleep(2)
+        print("'You thought you could outsmart the system? You're coming with me.'")
+        sleep(2)
+        print("Trinity yells, 'You have to fight him off while I finish the hack!'")
+        sleep(3)
 
-# Prompt the user to choose a weapon
-print("You must act fast so you prepare for a battle! Choose your weapon:")
-print("1. A metal pipe")
-print("2. Your fists")
-print("3. A nearby keyboard")
-weapon = input("Choose your weapon (1/2/3): ")
+    #The user needs  to choose a weapon
+    print("You must act fast so you prepare for a battle! Choose your weapon:")
+    print("1. A metal pipe")
+    print("2. Your fists")
+    print("3. A nearby keyboard")
+    weapon = input("Choose your weapon (1/2/3): ")
 
-# Handle the user's choice
-    if weapon == '1':
+    #The user's choice outcome
+    if weapon == "1":
     print("You swing the metal pipe and hit your opponent on the head, knocking them unconscious!")
-    elif weapon == '2':
+    elif weapon == "2":
     print("You engage in hand-to-hand combat and manage to land a strong punch, knocking them out!")
-    elif weapon == '3':
-    print("You grab the keyboard and smash it over their head, rendering them unconscious!")
+    elif weapon == "3":
+    print("You grab the keyboard and smash it over their head, putting them unconscious!")
     else:
-    print("You hesitate for too long, and the intruder overpowers you. The system resets!")
+    print("You hesitated for too long, and the intruder overpowers you. The system resets!")
     exit()
 
 print("With your opponent down, you quickly return to hacking the system!")
-sleep(2)
+sleep(3) #Three seconds break
 
-# Transition to the next challenge
-print("\nWith the intruder knocked out, you quickly move on to the next challenge.")
-sleep(2)
-print("You see a panel with three switches labeled A, B and C")
-sleep(2)
-print("Only one correct combination will disable the final firewall and allow you to finish hacking the system.")
-correct_combination = random.choice(["A", "B", "C"])
+#Transition to the next challenge
+    print("\nWith the intruder knocked out, you quickly have to move on to the next challenge.")
+    sleep(2)
 
-# Loop until the correct switch is chosen
-while True:
-    switch_choice = input("Which switch do you activate? (A/B/C): ").upper()
-    if switch_choice == correct_combination:
-        print("The system unlocks! You've successfully hacked The Matrix!")
-        break
-    else:
-        print("Incorrect switch! The system resets. Try again!")
-
-            
-        print("\nWith the intruder knocked out, you quickly move on to the next challenge.")
-        sleep(2)
-        print("You see a panel with three switches labeled A, B and C")
+    print("You see a panel with three switches labeled A, B and C")
         sleep(2)
         print("Only one correct combination will disable the final firewall and allow you to finish hacking the system.")
         correct_combination = random.choice(["A", "B", "C"])
