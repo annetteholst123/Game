@@ -28,7 +28,7 @@ class Character:
         # Health reduces by the damage done by the weapon of the attacker
         opponent.health -= self.weapon.damage
         # Makes sure that health never goes below 0 (since 0 means you've lost)
-        opponent.health = max(target.health, 0)
+        opponent.health = max(opponent.health, 0)
         # Updates the health of the opponent in the health bar
         opponent.health_bar.update()
         print(f"{self.name} dealt {self.weapon.damage} damage to "
