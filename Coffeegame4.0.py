@@ -7,7 +7,7 @@ import csv
 import os
 
 #How to run this Coffeegame file in spyder with anaconda
-#1 First make sure that the zip file is selected the directory
+#1 First make sure that the zip file is selected in the directory, so that it can read the files
 #2 Then open the google spreadsheets (that is the connection with the excel file)
 #3 Then make sure to import the right packages gspread and oauth2client.service_account. If the packages are not installed, open the anacondapromp and use pip install function )code: pip install oauth2client and pip install gspread) 
 #4 Run the file in spyder with anaconda!
