@@ -2,6 +2,8 @@
 
 # Import library
 import os
+import platform
+import subprocess
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
@@ -98,8 +100,20 @@ def restore_from_backup(sheet):
         else:
             print("No backup data found.")
     except gspread.exceptions.WorksheetNotFound:
-        print("No backup sheet found. Cannot restore data.")       
-
+        print("No backup sheet found. Cannot restore data.")    
+        
+#creating a cross-platform function to be able to open txt file
+def open_file(filename):
+    #create the function for windows
+    if platform.system() == "Windows":
+        os.startfile(filename)
+    #create the function for macOS
+    elif platform.system() == "Darwin":
+        subprocess.call(["open", filename])
+    #create the function for Linux and any other OS
+    else:
+        subprocess.call(["xdg-open", filename])
+        
 # Function to save the Output to a file
 def save_output_to_file(output_string, filename="EspressoYoSelf_Groups.txt"):
     try:
@@ -112,7 +126,7 @@ def save_output_to_file(output_string, filename="EspressoYoSelf_Groups.txt"):
             file.write("New groups are assigned. Have fun!\n")
             file.write("-------------------------\n")
         print(f"Groups have been saved to '{filename}'")
-        os.startfile(filename)
+        open_file(filename)
     except Exception as e:
         print(f"error saving output to file {e}")
 
