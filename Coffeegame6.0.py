@@ -10,7 +10,7 @@ import copy
 import csv
 
 # How to run this EspressYo Self game file in spyder with the use of anaconda
-# 1 First make sure to download the zip file and make sure the EspressYo Self matching game zip file is selected in the directory, so that it can read all files
+# 1 First make sure to download the zip file and make sure the EspressYo Self matching zip file is selected in the directory, so that it can read all files
 # 2 Then open the google spreadsheets (that is the connection with the excel file)
 # 3 Fill in the Google forms with participant data (the google forms is linked to the spreadsheet and will be updated automatically)
 # 4 Then make sure to import the right packages gspread and oauth2client.service_account. If the packages are not installed, open the anacondapromp and use pip install function (code: pip install oauth2client and pip install gspread)
