@@ -11,9 +11,9 @@ import csv
 
 # How to run this EspressYo Self game file in spyder with the use of anaconda
 # 1 First make sure to download the EspressYo Self zip file and make sure that the file is selected in the directory of spyder, so that it can read all files
-# 2 Then open the google spreadsheets (that is the connection with the excel file)
+# 2 Then open the google spreadsheets (that is the connection with the excel file) and open the Coffeegame file.
 # 3 Fill in the Google forms with participant data (the google forms is linked to the spreadsheet and will be updated automatically)
-# 4 Then make sure to import the right packages gspread and oauth2client.service_account. If the packages are not installed, open the anacondapromp and use pip install function (code: pip install oauth2client and pip install gspread)
+# 4 Then make sure to import the right packages gspread and oauth2client.service_account in order to run the code in first place. If the packages are not installed, open the anacondapromp and use pip install function (code: pip install oauth2client and pip install gspread)
 # 5 Now you can run the file in spyder with anaconda and it will form the groups and it will produce a txt file with the groups and a question to break the ice.
 
 # The source used for (most of) the icebreakers is: https://www.mural.co/blog/icebreaker-questions.
