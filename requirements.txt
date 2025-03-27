@@ -1,0 +1,1 @@
+pip install matplotlib plotnine statsmodels seaborn plotly.express geopandas
