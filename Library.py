@@ -85,5 +85,44 @@ class Member:
             return members
         except UnboundLocalError:
             print("There are no members registered in the system yet.")
-        
+            
+class Loan:
+    all_loans = []
+
+    def __init__(self, member_id=None, book_title=None, book_author=None):
+        self.member_id = member_id
+        self.book_title = book_title
+        self.book_author = book_author
+        self.loan_date = datetime.date.today() if member_id else None
+        self.return_date = None
+
+    def borrow_book(self):
+        if [self.book_title, self.book_author] in Book.all_books:
+            Book.all_books.remove([self.book_title, self.book_author])
+            Loan.all_loans.append(self)
+            print(f"Book '{self.book_title}' successfully borrowed by member {self.member_id}.")
+        else:
+            print(f"Sorry, '{self.book_title}' by {self.book_author} is not currently available.")
+
+    def return_book(self):
+        for loan in Loan.all_loans:
+            if (loan.member_id == self.member_id and
+                loan.book_title == self.book_title and
+                loan.book_author == self.book_author and
+                loan.return_date is None):
+                loan.return_date = datetime.date.today()
+                Book.all_books.append([self.book_title, self.book_author])
+                print(f"Book '{self.book_title}' successfully returned by member {self.member_id}.")
+                return
+        print("No matching active loan found.")
+
+    def view_loans(self):
+        if not Loan.all_loans:
+            print("No loan records found.")
+            return
+        for loan in Loan.all_loans:
+            status = "Returned" if loan.return_date else "Borrowed"
+            print(f"{loan.member_id} - '{loan.book_title}' by {loan.book_author} | "
+                  f"Loan Date: {loan.loan_date} | "
+                  f"Return Date: {loan.return_date or 'Not Returned'} | Status: {status}")
             
