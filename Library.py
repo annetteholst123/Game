@@ -1,14 +1,16 @@
 # Import the random package (needed to randomize the id of members)
 import random
+import datetime
     
 class Book:
     all_books = []
-    def __init__(self):
+    def __init__(self, Title=None, author=None):
         # User enters book title
-        title = input("Enter the title of the book:")
+        if Title is None:
+            title = input("Enter the title of the book:")
+        if author is None:
+            author = input("Enter author of the book:")
         self.title = title
-        # User enters author title
-        author = input("Enter author of the book:")
         self.author = author
 
     def Add_Book(self):
@@ -44,7 +46,45 @@ class Book:
         return number_copies
 
     def Search_Book(self):
-        print("hello")    
+        print("\nSearch Options:")
+        print("1. Search by title")
+        print("2. Search by author")
+        print("3. Search by both title and author")
+        choice = input("Choose an option (1-3): ")
+    
+        title = None
+        author = None
+
+        if choice == '1':
+            title = input("Enter the book title to search: ").strip()
+        elif choice == '2':
+            author = input("Enter the author name to search: ").strip()
+        elif choice == '3':
+            title = input("Enter the book title to search: ").strip()
+            author = input("Enter the author name to search: ").strip()
+        else:
+            print("Invalid choice. Returning to menu.")
+            return
+
+        matches = []
+        for book in Book.all_books:
+            match = True
+            if title and book[0].lower() != title.lower():
+                match = False
+            if author and book[1].lower() != author.lower():
+                match = False
+            if match:
+                matches.append(tuple(book))
+
+        if matches:
+            from collections import Counter
+            count_books = Counter(matches)
+            print("\nSearch Results:")
+            for (title, author), count in count_books.items():
+                print(f"'{title}' by {author} - {count} copy/copies")
+        else:
+            print("No matching books found.")
+    
 
 class Member:
     # List of members
@@ -88,21 +128,32 @@ class Member:
             
 class Loan:
     all_loans = []
-
+    loan_period_days = 14
+    fine_per_day =  0.75
+    
     def __init__(self, member_id=None, book_title=None, book_author=None):
         self.member_id = member_id
         self.book_title = book_title
         self.book_author = book_author
         self.loan_date = datetime.date.today() if member_id else None
         self.return_date = None
+        self.fine_paid = True
 
     def borrow_book(self):
+        for loan in Loan.all_loans:
+            if loan.member_id == self.member_id and loan.fine_paid is False:
+                print(f"Borrowing blocked. Member {self.member_id} has unpaid fines.")
+                Loan.view_fines(self.member_id)
+                return
+                
         if [self.book_title, self.book_author] in Book.all_books:
             Book.all_books.remove([self.book_title, self.book_author])
             Loan.all_loans.append(self)
             print(f"Book '{self.book_title}' successfully borrowed by member {self.member_id}.")
+            Loan.log_action("borrow", self.member_id, self.book_title, self.book_author, "Book borrowed.")
         else:
             print(f"Sorry, '{self.book_title}' by {self.book_author} is not currently available.")
+
 
     def return_book(self):
         for loan in Loan.all_loans:
@@ -113,6 +164,19 @@ class Loan:
                 loan.return_date = datetime.date.today()
                 Book.all_books.append([self.book_title, self.book_author])
                 print(f"Book '{self.book_title}' successfully returned by member {self.member_id}.")
+                due_date = loan.loan_date + datetime.timedelta(days=Loan.loan_period_days)
+                if loan.return_date > due_date:
+                    late_days = (loan.return_date - due_date).days
+                    fine = late_days * Loan.fine_per_day
+                    loan.fine_paid = False
+                    print(f"Returned too late, {late_days} days overdue.")
+                    print(f"Fine: €{fine:.2f}")
+                    Loan.log_action("return", self.member_id, self.book_title, self.book_author,
+                                f"Returned late. Fine: €{fine:.2f}")
+                else:
+                    print("Returned on time. No fine.")
+                    Loan.log_action("return", self.member_id, self.book_title, self.book_author,
+                                "Returned on time.")
                 return
         print("No matching active loan found.")
 
@@ -126,3 +190,24 @@ class Loan:
                   f"Loan Date: {loan.loan_date} | "
                   f"Return Date: {loan.return_date or 'Not Returned'} | Status: {status}")
             
+    def view_fines(member_id):
+        total_fine = 0.0
+        print(f"\n Fine Summary for Member ID: {member_id}")
+        for loan in Loan.all_loans:
+            if loan.member_id == member_id and loan.return_date:
+                due_date = loan.loan_date + datetime.timedelta(days=Loan.loan_period_days)
+                if loan.return_date > due_date:
+                    late_days = (loan.return_date - due_date).days
+                    fine = late_days * Loan.fine_per_day
+                    total_fine += fine
+                    print(f"'{loan.book_title}' by {loan.book_author} — {late_days} days late. Fine: €{fine:.2f}")
+        if total_fine > 0:
+            print(f"\n Total Fine Due: €{total_fine:.2f}")
+        else:
+            print(" No outstanding fines.")
+        
+    def log_action(action_type, member_id, book_title, book_author, message):
+        with open("log.txt", "a") as logfile:
+            now = datetime.datetime.now().strftime("%Y-%m-%d")
+            log_entry = f"[{now}] {action_type.upper()} | Member: {member_id} | Book: '{book_title}' by {book_author} | {message}\n"
+            logfile.write(log_entry)
